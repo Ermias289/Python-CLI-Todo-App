@@ -39,4 +39,17 @@ def notify_user_overdue(task_due_date):
     if task_due_date < today:
         print(f"Task due date {task_due_date} is overdue!")
     
+def delete_task(task_id):
+    """Delete a task by its ID."""
+    tasks = load_file("tasks.json")
+    for task in tasks:
+        if task['task_id'] == task_id:
+            index_task = tasks.index(task)
+            del tasks[index_task] 
+            print(f"Task with ID {task_id} deleted successfully.")
+            save_file("tasks.json", tasks)
+    print(f"Task with ID {task_id} not found.")
 
+task_id = 1
+
+delete_task(task_id)
