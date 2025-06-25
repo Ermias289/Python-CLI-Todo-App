@@ -1,1 +1,11 @@
-[]
+[
+    {
+        "task_id": 1,
+        "task_title": "Sample Task",
+        "task_description": "This is a sample task description.",
+        "task_status": "Pending",
+        "task_due_date": "2023-12-31",
+        "task_created_date": "2025-06-25",
+        "task_status_updated_date": null
+    }
+]
