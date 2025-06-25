@@ -53,7 +53,7 @@ def delete_task(task_id):
     try:
         tasks = load_file("tasks.json")
         for task in tasks:
-            if task['task_id'] == task_id:
+            if task['task_id'] == int(task_id):
                 index_task = tasks.index(task)
                 del tasks[index_task] 
                 print(f"Task with ID {task_id} deleted successfully.")
@@ -62,10 +62,9 @@ def delete_task(task_id):
     except Exception as e:
         print(f"❌ Error in delete_task: {e}")
 
-def update_task_status(task_id, file_path):
+def update_task(task_id, file_path):
     """Update Task."""
     try:
-
         print(
             '''
                   What Would You Like to Update?
@@ -81,7 +80,7 @@ def update_task_status(task_id, file_path):
         tasks = load_file(file_path)
         choice = input("Enter your choice (1-6): ")
         for task in tasks:
-            if task["task_id"] == task_id:
+            if task["task_id"] == int(task_id):
                 match choice:
                     case '1':
                         task['task_title'] = input("Enter new task title: ")
@@ -90,7 +89,7 @@ def update_task_status(task_id, file_path):
                         task['task_description'] = input("Enter new task description: ")
                         task['task_status_updated_date'] = format_date()
                     case '3':
-                        update_task_status(task_id, input("Enter new task status: "))
+                        task['task_status'] = input("Enter new task status: ")
                         task['task_status_updated_date'] = format_date()
                     case '4':
                         task['task_due_date'] = input("Enter new task due date (YYYY-MM-DD): ")
@@ -111,31 +110,11 @@ def update_task_status(task_id, file_path):
                 print(f"Task with ID {task_id} updated successfully.")
             break
         else: print(f"Task with ID {task_id} not found.") 
-        
-    
     except Exception as e:
         print(f"❌ Error in update_task_status: {e}")
 
-test_data = [
-    {"task_id": 1, "task_title": "Test Task", "task_description": "This is a test task."}
-]
-
-update_task_status(1, "tasks.json")
 
 
 
 
 
-
-
-
-# tasks = load_file("tasks.json")
-#         for task in tasks:
-#             if task[task_id] == task_id:
-#                 task['task_status'] = new_status
-#                 task['task_status_updated_date'] = format_date()
-#                 print(f"Task with {task['task_status']} status updated to {new_status}.")
-#                 save_file("tasks.json", tasks)
-#                 return tasks
-#             else:
-#                 print(f"Task with ID {task_id} not found.")

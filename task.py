@@ -1,4 +1,4 @@
-from utils import format_date, task_id_generator, notify_user_overdue, delete_task, update_task_status, load_file, save_file
+from utils import load_file, save_file, update_task, format_date, task_id_generator, delete_task, notify_user_overdue
 
 class Task:
     def __init__(self):
@@ -55,50 +55,45 @@ class Task:
                 f"Due Date: {self.task_due_date}, Created Date: {self.task_created_date}, "
                 f"Status Updated Date: {self.task_status_updated_date}")
     
-    def update_task(self, task_id, tasks, file_path):
+    def update_task(self, task_id, file_path):
         """Update an existing task with new data."""
-        print(
-            '''
-                  What Would You Like to Update?
-                    1. Task Title
-                    2. Task Description
-                    3. Task Status
-                    4. Task Due Date
-                    5. All
-                    6. Exit
-        '''
-        )
-        tasks = load_file(file_path)
-        choice = input("Enter your choice (1-6): ")
-        for task in tasks:
-            if task['task_id'] == task_id:
-                task.update(tasks)
-                task['task_status_updated_date'] = format_date()
-                save_file(file_path, tasks)
-                print(f"Task with ID {task_id} updated successfully.")
-                return
-        print(f"Task with ID {task_id} not found.") 
-        match choice:
-            case '1':
-                tasks['task_title'] = input("Enter new task title: ")
-            case '2':
-                tasks['task_description'] = input("Enter new task description: ")
-            case '3':
-                update_task_status(task_id)
-            case '4':
-                tasks['task_due_date'] = input("Enter new task due date (YYYY-MM-DD): ")
-            case '5':
-                tasks['task_title'] = input("Enter new task title: ")
-                tasks['task_description'] = input("Enter new task description: ")
-                tasks['task_status'] = input("Enter new task status: ")
-                tasks['task_due_date'] = input("Enter new task due date (YYYY-MM-DD): ")
-            case '6':
-                print("Exiting update process.")
-                return
-            case _:
-                print("Invalid choice. Please try again.")
-                return
-    
-    
-       
+        try:
+          update_task(task_id, file_path)
+        except Exception as e:
+            print(f"❌ Error in update_task: {e}")
+
+    def mark_complete(self, task_id, file_path):
+        # Mark a task Complete
+        try:
+            found = False
+            tasks =  load_file(file_path)
+            for task in tasks: 
+                if task['task_id'] == task_id:
+                    task['task_status'] = "Complete"
+                    found = True
+                    break
+                        
+            if found:
+                save_file(tasks, file_path)  # Save updated tasks
+                print(f"✅ Task {task_id} marked as Complete.")
+            else:
+                print(f"❌ Task with ID {task_id} not found.")
+                
+        except Exception as e:
+            print(f"❌ Error in marking a task: {e}")
+
+    def tasks_due_today(self, file_path):
+        # Tasks that are due today
         
+        try:
+            tasks = load_file(file_path)
+            due_today_tasks = []
+            for task in tasks:
+                if task['task_due_date'] == format_date():
+                    due_today_tasks.append(task)
+
+            if due_today_tasks == []:
+                print("There are no tasks due today")
+        except Exception as e:
+            print(f"❌ Error in listing tasks that are due today: {e}")
+        return due_today_tasks
