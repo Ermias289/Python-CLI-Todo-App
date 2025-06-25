@@ -62,22 +62,65 @@ def delete_task(task_id):
     except Exception as e:
         print(f"❌ Error in delete_task: {e}")
 
-def update_task_status(task_id, new_status):
-    """Update the status of a task by its Id."""
+def update_task_status(task_id, file_path):
+    """Update Task."""
     try:
-        tasks = load_file("tasks.json")
+
+        print(
+            '''
+                  What Would You Like to Update?
+                    1. Task Title
+                    2. Task Description
+                    3. Task Status
+                    4. Task Due Date
+                    5. All
+                    6. Exit
+        '''
+        )
+
+        tasks = load_file(file_path)
+        choice = input("Enter your choice (1-6): ")
         for task in tasks:
-            if task[task_id] == task_id:
-                task['task_status'] = new_status
-                task['task_status_updated_date'] = format_date()
-                print(f"Task with {task['task_status']} status updated to {new_status}.")
+            if task["task_id"] == task_id:
+                match choice:
+                    case '1':
+                        task['task_title'] = input("Enter new task title: ")
+                        task['task_status_updated_date'] = format_date()
+                    case '2':
+                        task['task_description'] = input("Enter new task description: ")
+                        task['task_status_updated_date'] = format_date()
+                    case '3':
+                        update_task_status(task_id, input("Enter new task status: "))
+                        task['task_status_updated_date'] = format_date()
+                    case '4':
+                        task['task_due_date'] = input("Enter new task due date (YYYY-MM-DD): ")
+                        task['task_status_updated_date'] = format_date()
+                    case '5':
+                        task['task_title'] = input("Enter new task title: ")
+                        task['task_description'] = input("Enter new task description: ")
+                        task['task_status'] = input("Enter new task status: ")
+                        task['task_due_date'] = input("Enter new task due date (YYYY-MM-DD): ")
+                        task['task_status_updated_date'] = format_date()
+                    case '6':
+                        print("Exiting update process.")
+                        return
+                    case _:
+                        print("Invalid choice. Please try again.")
+                       
                 save_file("tasks.json", tasks)
-                return tasks
-            else:
-                print(f"Task with ID {task_id} not found.")
+                print(f"Task with ID {task_id} updated successfully.")
+            break
+        else: print(f"Task with ID {task_id} not found.") 
+        
+    
     except Exception as e:
         print(f"❌ Error in update_task_status: {e}")
 
+test_data = [
+    {"task_id": 1, "task_title": "Test Task", "task_description": "This is a test task."}
+]
+
+update_task_status(1, "tasks.json")
 
 
 
@@ -86,3 +129,13 @@ def update_task_status(task_id, new_status):
 
 
 
+# tasks = load_file("tasks.json")
+#         for task in tasks:
+#             if task[task_id] == task_id:
+#                 task['task_status'] = new_status
+#                 task['task_status_updated_date'] = format_date()
+#                 print(f"Task with {task['task_status']} status updated to {new_status}.")
+#                 save_file("tasks.json", tasks)
+#                 return tasks
+#             else:
+#                 print(f"Task with ID {task_id} not found.")
