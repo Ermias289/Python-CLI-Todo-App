@@ -13,4 +13,12 @@ def load_file(file_name):
         print(f"❌ JSON decode error in '{file_name}': {e}")
         task = []
     return task
+
+def save_file(file_name, task):
+    """Save a JSON file with the given content."""
+    try:
+        with open(file_name, 'w') as f:
+            json.dump(task, f, indent=4)
+    except IOError as e:
+        print(f"❌ Error saving file '{file_name}': {e}")
     
