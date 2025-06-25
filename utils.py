@@ -1,4 +1,4 @@
-import datetime
+from datetime import date
 import json
 
 def load_file(file_name):
@@ -22,3 +22,21 @@ def save_file(file_name, task):
     except IOError as e:
         print(f"❌ Error saving file '{file_name}': {e}")
     
+
+def task_id_generator(tasks): 
+    """Generate a unique task ID based on existing tasks."""
+    if not tasks:
+        return 1
+    else:
+        return max(task['task_id'] for task in tasks) + 1
+
+def format_date():
+    return date.today().strftime('%Y-%m-%d')
+
+def notify_user_overdue(task_due_date):
+    """Notify the user if a task is overdue."""
+    today = date.today().strftime('%Y-%m-%d')
+    if task_due_date < today:
+        print(f"Task due date {task_due_date} is overdue!")
+    
+
