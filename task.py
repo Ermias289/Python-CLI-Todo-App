@@ -1,4 +1,5 @@
-from utils import load_file, save_file, update_task, format_date, task_id_generator, delete_task, notify_user_overdue
+from utils import load_file, save_file, update_task, format_date, task_id_generator, delete_task, notify_user_overdue, is_valid_date
+
 
 class Task:
     def __init__(self):
@@ -25,9 +26,7 @@ class Task:
                 5. View tasks due today
                 6. Update Task Data
                 7. Exit
-
-            """
-            
+            """  
         )
 
         choice = int(input("Enter the service you would like to get: "))
@@ -51,7 +50,19 @@ class Task:
             self.task_title = new_task.task_title
             self.task_description = new_task.task_description
             self.task_due_date = new_task.task_due_date
-            self.task_status = "Pending"
+            while True:
+                if is_valid_date(self.task_due_date):
+                    break
+                else:
+                    print("❌ Invalid date. Please enter in yy-mm-dd format.")
+                    self.task_due_date = input("Please enter the due date in the correct format: ")
+            
+            if self.task_due_date == format_date():
+                self.task_status = "Due today"
+            elif self.task_due_date < format_date():
+                self.task_status = "Over Due"
+            else:
+                self.task_status = "Pending"
             self.task_created_date = format_date()
             self.task_status_updated_date = None
 
@@ -85,25 +96,39 @@ class Task:
         except Exception as e:
             print(f"❌ Error in update_task: {e}")
 
-    def mark_complete(self, task_id, file_path):
+    def mark_complete(self, file_path):
         # Mark a task Complete
         try:
-            found = False
+            task_id = int(input("Plese enter the id of the task that you want to update : "))
             tasks =  load_file(file_path)
             for task in tasks: 
                 if task['task_id'] == task_id:
-                    task['task_status'] = "Complete"
-                    found = True
-                    break
-                        
-            if found:
-                save_file(tasks, file_path)  # Save updated tasks
-                print(f"✅ Task {task_id} marked as Complete.")
-            else:
-                print(f"❌ Task with ID {task_id} not found.")
-                
+                    while True:
+                        task_status = int(input("Enter task status: \n 1. Pending \n 2. In Progress \n 3. Completed \n:"))
+                        match task_status:
+                            case 1: 
+                                task['task_status'] = "Pending"
+                                print(f"✅ Task {task_id} marked as Pending.")
+                                break
+                            case 2: 
+                                task['task_status'] = "In Progress"
+                                print(f"✅ Task {task_id} marked as In Progress.")
+                                break
+                            case 3: 
+                                if task['task_due_date'] == format_date():
+                                    task['task_status']  = "Completed"
+                                    print(f"✅ Task {task_id} marked as Complete.")
+                                elif task['task_due_date']  < format_date():
+                                    task['task_status']  = "Overdue-Completed" 
+                                    print(f"✅ Task {task_id} marked as OverDue-Complete.")
+                                break
+                            case _: 
+                                print("Invalid status. Please enter 1, 2, or 3.")
+                    break  
         except Exception as e:
             print(f"❌ Error in marking a task: {e}")
+        
+        save_file(file_path, tasks)
 
     def tasks_due_today(self, file_path):
         # Tasks that are due today
@@ -133,3 +158,19 @@ class Task:
             
         except Exception as e:
             print(f"❌ Error in deleting task: {e}")
+    
+    def view_all(self, file_name):
+        tasks = load_file(file_name)
+        for task in tasks:
+            print (f'''
+                   
+                Task Id : {task["task_id"]}
+                Ttask Title: {task["task_title"]}
+                Task Description: {task["task_description"]}
+                Task Status: {task["task_status"]}
+                Task Due Date": {task["task_due_date"]}
+                Task Created Date": {task["task_created_date"]}
+                Task Status Updated Date": {task["task_status_updated_date"]}
+
+            ''')
+               

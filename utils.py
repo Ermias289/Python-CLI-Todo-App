@@ -1,4 +1,5 @@
 from datetime import date
+from datetime import datetime
 import json
 
 def load_file(file_name):
@@ -118,7 +119,13 @@ def update_task(task_id, file_path):
     except Exception as e:
         print(f"❌ Error in update_task_status: {e}")
 
-
+def is_valid_date(date_str):
+    try:
+        # Try to parse the date with the format yy-mm-dd
+        parsed_date = datetime.strptime(date_str, "%Y-%m-%d")
+        return True
+    except ValueError:
+        return False
 
 
 
