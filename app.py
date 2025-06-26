@@ -14,7 +14,7 @@ def main():
             case 1:
                 new_task.task_title = input("Enter the title of your new task: ")
                 new_task.task_description = input("Enter the description of the task: ")
-                new_task.task_due_date = input("Enter the due date of your task: ")
+                new_task.task_due_date = input("Enter the due date of your task(year-month-day): ")
                 new_task.create_task(new_task, file_path)
                 print('''
                         *********************************
@@ -34,7 +34,7 @@ def main():
             case 4: 
                 new_task.delete_task_Id(file_path)
             case 5:
-                new_task.tasks_due_today(file_path)
+                print(new_task.tasks_due_today(file_path))
             case 6:
                 new_task.update_task(file_path)
             case 7:
