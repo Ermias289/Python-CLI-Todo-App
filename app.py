@@ -1,5 +1,9 @@
 from task import Task
 import time
+import sys
+
+
+
 def main():
     """Main Menu Of To do List App"""
     new_task = Task()
@@ -27,13 +31,15 @@ def main():
             case 3:
                 new_task.mark_complete(file_path)
                 time.sleep(2)
-# 1. Add a new task
-#                 2. View all tasks
-#                 3. Mark a task as complete
-#                 4. Delete a task
-#                 5. View tasks due today
-#                 6. Update Task Data
-#                 7. Exit
-
+            case 4: 
+                new_task.delete_task_Id(file_path)
+            case 5:
+                new_task.tasks_due_today(file_path)
+            case 6:
+                new_task.update_task(file_path)
+            case 7:
+                print("Exiting....Good Bye 😊")
+                sys.exit()
+                
 if __name__ == "__main__":
     main()

@@ -68,9 +68,10 @@ def delete_task(task_id, file_path):
     except Exception as e:
         print(f"❌ Error in delete_task: {e}")
 
-def update_task(task_id, file_path):
+def update_task(file_path):
     """Update Task."""
     try:
+        task_id = input("Please enter the id of the task that you want to update: ")
         print(
             '''
                   What Would You Like to Update?
@@ -112,7 +113,7 @@ def update_task(task_id, file_path):
                     case _:
                         print("Invalid choice. Please try again.")
                        
-                save_file("tasks.json", tasks)
+                save_file(file_path, tasks)
                 print(f"Task with ID {task_id} updated successfully.")
             break
         else: print(f"Task with ID {task_id} not found.") 

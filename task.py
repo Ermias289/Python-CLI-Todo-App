@@ -89,20 +89,20 @@ class Task:
                 f"Due Date: {self.task_due_date}, Created Date: {self.task_created_date}, "
                 f"Status Updated Date: {self.task_status_updated_date}")
     
-    def update_task(self, task_id, file_path):
+    def update_task(self, file_path):
         """Update an existing task with new data."""
         try:
-          update_task(task_id, file_path)
+          update_task(file_path)
         except Exception as e:
             print(f"❌ Error in update_task: {e}")
 
     def mark_complete(self, file_path):
         # Mark a task Complete
         try:
-            task_id = int(input("Plese enter the id of the task that you want to update : "))
+            task_id = input("Plese enter the id of the task that you want to update : ")
             tasks =  load_file(file_path)
             for task in tasks: 
-                if task['task_id'] == task_id:
+                if task['task_id'] == int(task_id):
                     while True:
                         task_status = int(input("Enter task status: \n 1. Pending \n 2. In Progress \n 3. Completed \n:"))
                         match task_status:
@@ -124,6 +124,8 @@ class Task:
                                 break
                             case _: 
                                 print("Invalid status. Please enter 1, 2, or 3.")
+                            
+                        save_file(file_path, tasks)
                     break  
         except Exception as e:
             print(f"❌ Error in marking a task: {e}")
