@@ -48,17 +48,22 @@ def notify_user_overdue(task_due_date):
     except Exception as e:
         print(f"❌ Error in notify_user_overdue: {e}")
 
-def delete_task(task_id):
+def delete_task(task_id, file_path):
     """Delete a task by its ID."""
     try:
-        tasks = load_file("tasks.json")
+        deleted = False
+        tasks = load_file(file_path)
         for task in tasks:
             if task['task_id'] == int(task_id):
                 index_task = tasks.index(task)
-                del tasks[index_task] 
-                print(f"Task with ID {task_id} deleted successfully.")
-                save_file("tasks.json", tasks)
+                del tasks[index_task]
+                deleted = True
+                break 
             else: print(f"Task with ID {task_id} not found.")
+        
+        if deleted:
+            print(f"Task with ID {task_id} deleted successfully.")
+            save_file(file_path, tasks)
     except Exception as e:
         print(f"❌ Error in delete_task: {e}")
 

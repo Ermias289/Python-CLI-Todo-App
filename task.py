@@ -11,6 +11,29 @@ class Task:
         self.task_created_date = None
         self.task_status_updated_date = None
 
+    def app_menu(self):
+        
+        print(
+            """
+                Hello, Welcome to Our Todo List App!
+            Which service would you like to get today?
+            
+                1. Add a new task
+                2. View all tasks
+                3. Mark a task as complete
+                4. Delete a task
+                5. View tasks due today
+                6. Update Task Data
+                7. Exit
+
+            """
+            
+        )
+
+        choice = int(input("Enter the service you would like to get: "))
+
+        return choice
+
     def create_task(self, new_task, file_path):
         """Create a new task with user input."""
         # Load existing tasks from the file
@@ -91,9 +114,22 @@ class Task:
             for task in tasks:
                 if task['task_due_date'] == format_date():
                     due_today_tasks.append(task)
-
             if due_today_tasks == []:
                 print("There are no tasks due today")
         except Exception as e:
             print(f"❌ Error in listing tasks that are due today: {e}")
         return due_today_tasks
+    
+    def delete_task_Id(self, file_path):
+        """Delete a task by ID with user input."""
+        try:
+            task_id = input("🗑️ Enter the ID of the task you want to delete: ").strip()
+            
+            if not task_id.isdigit():
+                print("❌ Invalid ID. Please enter a numeric task ID.")
+                return
+            
+            delete_task(task_id, file_path)
+            
+        except Exception as e:
+            print(f"❌ Error in deleting task: {e}")
